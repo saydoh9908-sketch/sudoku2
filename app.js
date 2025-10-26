@@ -4,9 +4,8 @@ const path = require('path');
 const url = require('url');
 const { WebSocketServer } = require('ws'); // Import WebSocketServer
 
-// Use separate, hardcoded ports for local development
-const port = 3000;
-const wsPort = 8080;
+// Use the port provided by the environment (e.g., Render) or a default for local development.
+const port = process.env.PORT || 8080;
 
 /**
  * -------------------
@@ -58,20 +57,13 @@ const httpServer = http.createServer((req, res) => {
     });
 });
 
-httpServer.listen(port, '0.0.0.0', (error) => {
-    if (error) {
-        return console.log('Something went wrong', error);
-    }
-    console.log(`HTTP server is listening on http://localhost:${port}`);
-});
-
 /**
  * ----------------------
  * 2. WebSocket Game Server
  * ----------------------
  */
-// Run the WebSocket server on its own port.
-const wss = new WebSocketServer({ port: wsPort });
+// Attach the WebSocket server to the existing HTTP server.
+const wss = new WebSocketServer({ server: httpServer });
 
 const games = {}; // Store active games
 
@@ -236,4 +228,9 @@ wss.on('connection', (ws) => {
     });
 });
 
-console.log(`WebSocket server is listening on ws://localhost:${wsPort}`);
+httpServer.listen(port, () => {
+    console.log(`Server is running on http://localhost:${port}`);
+    console.log(`WebSocket server is sharing the same port.`);
+});
+
+console.log(`WebSocket server is ready.`);
