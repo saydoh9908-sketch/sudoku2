@@ -27,7 +27,14 @@ document.addEventListener('DOMContentLoaded', () => {
     let gameMode = 'single';
     let gameId = null;
     let ws = null;
-    const WS_URL = `ws://${window.location.hostname}:8080`; // Dynamically set the WebSocket URL
+    const WS_URL = `ws// In sudoku-script.js
+    
+    // Change this line:
+    const WS_URL = `ws://${window.location.hostname}:8080`;
+    
+    // To this (using your Render URL and wss:// for a secure connection):
+    const WS_URL = 'wss://sudoku2-k6j7.onrender.com/'; 
+    // `ws://${window.location.hostname}:8080`; // Dynamically set the WebSocket URL
 
 
 
